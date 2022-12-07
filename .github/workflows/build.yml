@@ -5,10 +5,7 @@ on: [push]
 jobs:
   build:
     name: Build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Setup Go
@@ -16,7 +13,7 @@ jobs:
         with:
           go-version: 1.15.x
       - name: Build
-        run: go build -o server
+        run: go build -o app
       - name: Create Release
         uses: actions/create-release@v1
         env:
@@ -26,4 +23,4 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-          assets: server
+          assets: app
