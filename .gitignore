@@ -26,3 +26,6 @@ _testmain.go
 
 tmp
 .env
+logs
+server
+main
