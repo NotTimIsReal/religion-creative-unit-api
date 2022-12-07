@@ -1,4 +1,4 @@
-module git.alastairstuff.tk/nottimisreal/Religion-creative-unit-api
+module git.alastairstuff.tk/nottimisreal/religion-creative-unit-api
 
 go 1.19
 
