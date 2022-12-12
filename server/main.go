@@ -24,8 +24,11 @@ type posts struct {
 	Type    string `json:"type"`
 	Content string `json:"content"`
 }
+type Main struct {
+	Killed chan bool
+}
 
-func Start() {
+func (m *Main) Start() {
 	//get timestamp and store it right now
 	readEnv()
 
@@ -151,12 +154,30 @@ func Start() {
 		c.JSON(200, result)
 
 	})
-	killed := make(chan bool)
+	router.POST("/ghpayload", func(c *gin.Context) {
+		c.Status(200)
+		c.JSON(200, message{
+			Message: "OK",
+			Status:  200,
+		})
+		//wait once second to make sure the response is sent
+		go func() {
+			time.Sleep(time.Second)
+			m.End()
+		}()
+		return
+
+	})
 	go func() {
 		router.Run(":8080")
-		killed <- true
+		m.Killed <- true
 
 	}()
-	<-killed
+	<-m.Killed
+	logger.Println("Shutting down server")
+
+}
+func (m *Main) End() {
+	m.Killed <- true
 
 }
